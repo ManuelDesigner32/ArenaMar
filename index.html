@@ -1,4 +1,4 @@
-e<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es" class="h-full">
 <head>
     <meta charset="UTF-8">
@@ -103,7 +103,11 @@ e<!DOCTYPE html>
             const monthIdx = parseInt(document.getElementById('select-month-idx').value);
             const year = parseInt(document.getElementById('select-year').value);
 
-            document.getElementById('prev-month').innerText = monthNames[monthIdx];
+            const yearColors = { 2026: 'bg-sky-600', 2027: 'bg-amber-500', 2028: 'bg-emerald-600' };
+            const yearBg = yearColors[year] || 'bg-slate-600';
+            document.getElementById('prev-month').innerHTML =
+                monthNames[monthIdx] +
+                ' <span class="inline-block align-middle ml-1 px-3 py-0.5 rounded-full text-lg font-extrabold text-white tracking-normal ' + yearBg + '">' + year + '</span>';
 
             const container = document.getElementById('calendar-grid-cells');
             container.innerHTML = '';
