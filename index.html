@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+e<!DOCTYPE html>
 <html lang="es" class="h-full">
 <head>
     <meta charset="UTF-8">
@@ -61,7 +61,8 @@
                         reservedDays = data;
                         setStatus('<span class="w-2 h-2 mr-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Sincronizado en la Nube (En Vivo)');
                     } else {
-                        set(calendarRef, reservedDays);
+                        // Primera vez: se siembran los datos iniciales (solo ocurre una vez)
+                        set(calendarRef, Object.assign({}, reservedDays, { _v: 1 }));
                     }
                     window.renderCalendar();
                 }, (error) => {
@@ -85,9 +86,11 @@
         window.saveData = function() {
             if (db) {
                 const calendarRef = ref(db, 'arenamar/calendar_data');
-                set(calendarRef, reservedDays).then(() => {
+                set(calendarRef, Object.assign({}, reservedDays, { _v: 1 })).then(() => {
                     setStatus('<span class="w-2 h-2 mr-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Sincronizado en la Nube');
                 }).catch((err) => {
+                    console.error("Error guardando en Firebase:", err);
+                    setStatus('<span class="w-2 h-2 mr-1.5 rounded-full bg-red-500"></span> No se pudo guardar en la nube (revisa las reglas de Firebase)');
                     localStorage.setItem('arenamar_reserved_days', JSON.stringify(reservedDays));
                 });
             } else {
